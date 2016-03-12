@@ -12,6 +12,12 @@
 		7D18FB7F1C93DD14006C13C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D18FB7D1C93DD14006C13C6 /* Main.storyboard */; };
 		7D18FB811C93DD14006C13C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D18FB801C93DD14006C13C6 /* Assets.xcassets */; };
 		7D18FB841C93DD14006C13C6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D18FB821C93DD14006C13C6 /* LaunchScreen.storyboard */; };
+		7D8286771C93FF9E0001623C /* MediaPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286741C93FF9E0001623C /* MediaPicker.swift */; };
+		7D8286781C93FF9E0001623C /* MediaPickerLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286751C93FF9E0001623C /* MediaPickerLocalSource.swift */; };
+		7D8286791C93FF9E0001623C /* MediaPickerImportSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286761C93FF9E0001623C /* MediaPickerImportSource.swift */; };
+		7D9CB41A1C93FB8500602CDB /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9CB4191C93FB8500602CDB /* Photos.framework */; };
+		7D9CB41C1C93FB8A00602CDB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9CB41B1C93FB8A00602CDB /* AVFoundation.framework */; };
+		7D9CB41E1C93FB9700602CDB /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9CB41D1C93FB9700602CDB /* MobileCoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +28,12 @@
 		7D18FB801C93DD14006C13C6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7D18FB831C93DD14006C13C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D18FB851C93DD14006C13C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7D8286741C93FF9E0001623C /* MediaPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPicker.swift; sourceTree = "<group>"; };
+		7D8286751C93FF9E0001623C /* MediaPickerLocalSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPickerLocalSource.swift; sourceTree = "<group>"; };
+		7D8286761C93FF9E0001623C /* MediaPickerImportSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPickerImportSource.swift; sourceTree = "<group>"; };
+		7D9CB4191C93FB8500602CDB /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		7D9CB41B1C93FB8A00602CDB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		7D9CB41D1C93FB9700602CDB /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +41,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D9CB41E1C93FB9700602CDB /* MobileCoreServices.framework in Frameworks */,
+				7D9CB41C1C93FB8A00602CDB /* AVFoundation.framework in Frameworks */,
+				7D9CB41A1C93FB8500602CDB /* Photos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				7D18FB781C93DD14006C13C6 /* BlurTester */,
+				7D9CB4181C93FB7D00602CDB /* Frameworks */,
 				7D18FB771C93DD14006C13C6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,12 +72,33 @@
 			children = (
 				7D18FB791C93DD14006C13C6 /* AppDelegate.swift */,
 				7D18FB7B1C93DD14006C13C6 /* ViewController.swift */,
+				7D18FB971C93F31F006C13C6 /* Image Picker */,
 				7D18FB7D1C93DD14006C13C6 /* Main.storyboard */,
 				7D18FB801C93DD14006C13C6 /* Assets.xcassets */,
 				7D18FB821C93DD14006C13C6 /* LaunchScreen.storyboard */,
 				7D18FB851C93DD14006C13C6 /* Info.plist */,
 			);
 			path = BlurTester;
+			sourceTree = "<group>";
+		};
+		7D18FB971C93F31F006C13C6 /* Image Picker */ = {
+			isa = PBXGroup;
+			children = (
+				7D8286741C93FF9E0001623C /* MediaPicker.swift */,
+				7D8286751C93FF9E0001623C /* MediaPickerLocalSource.swift */,
+				7D8286761C93FF9E0001623C /* MediaPickerImportSource.swift */,
+			);
+			name = "Image Picker";
+			sourceTree = "<group>";
+		};
+		7D9CB4181C93FB7D00602CDB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7D9CB41D1C93FB9700602CDB /* MobileCoreServices.framework */,
+				7D9CB41B1C93FB8A00602CDB /* AVFoundation.framework */,
+				7D9CB4191C93FB8500602CDB /* Photos.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,7 +174,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D18FB7C1C93DD14006C13C6 /* ViewController.swift in Sources */,
+				7D8286781C93FF9E0001623C /* MediaPickerLocalSource.swift in Sources */,
+				7D8286771C93FF9E0001623C /* MediaPicker.swift in Sources */,
 				7D18FB7A1C93DD14006C13C6 /* AppDelegate.swift in Sources */,
+				7D8286791C93FF9E0001623C /* MediaPickerImportSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +331,7 @@
 				7D18FB8A1C93DD14006C13C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, MediaPickerDelegate {
 
     @IBOutlet var backgroundImageView: UIImageView!
     @IBOutlet var tutorialLabel: UILabel!
@@ -25,10 +25,28 @@ class MainViewController: UIViewController {
         blurredPanelMinimumHeight = (blurredPanelProportionalHeightConstraint.firstItem as! UIView).systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
     }
 
+    private func presentImportFailedAlert() {
+        let alert = UIAlertController(
+            title: NSLocalizedString("Import failed", comment: "File import failed error title"),
+            message: NSLocalizedString("Imported file is corrupted or unsupported.", comment: "File import failed error message"),
+            preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Dismiss", comment: ""),
+            style: .Cancel,
+            handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
     // MARK: - Actions
 
+    private var mediaPicker: MediaPicker?
+
     @IBAction func chooseBackgroundImage(sender: AnyObject?) {
-        // TODO: complete
+        let picker = MediaPicker(mediaType: .Photo)
+        picker.delegate = self
+        self.mediaPicker = picker
+
+        picker.presentPickerFromViewController(self)
     }
 
     @IBAction func exportComposition(sender: AnyObject?) {
@@ -90,6 +108,28 @@ class MainViewController: UIViewController {
         default:
             break
         }
+    }
+
+    // MARK: - MediaPickerDelegate
+
+    func mediaPicker(mediaPicker: MediaPicker, didFinishWithResult result: MediaPicker.Result) {
+        guard mediaPicker === self.mediaPicker else {
+            return
+        }
+
+        switch result {
+        case .Photo(image: let image):
+            backgroundImageView.image = image
+            tutorialLabel.hidden = true
+
+        case .ImportFailed:
+            presentImportFailedAlert()
+
+        case .Cancelled:
+            break
+        }
+
+        self.mediaPicker = nil
     }
 
 }
