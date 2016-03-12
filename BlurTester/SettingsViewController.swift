@@ -61,8 +61,6 @@ class SettingsViewController: UIViewController {
                 viewController.view.removeFromSuperview()
                 viewController.removeFromParentViewController()
             }
-
-            
         }
         didSet {
             for viewController in currentInspectorViewControllers {

@@ -19,6 +19,9 @@
 		7D7A52211C9461CD00AE0E83 /* ColorInspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A52201C9461CD00AE0E83 /* ColorInspectorViewController.swift */; };
 		7D7A52231C9461F000AE0E83 /* ColorRepresentations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A52221C9461F000AE0E83 /* ColorRepresentations.swift */; };
 		7D7A52251C94683E00AE0E83 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A52241C94683E00AE0E83 /* SettingsViewController.swift */; };
+		7D7A52271C948CC000AE0E83 /* ColorInspectorComponentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D7A52261C948CC000AE0E83 /* ColorInspectorComponentView.xib */; };
+		7D7A52291C948CDC00AE0E83 /* ColorInspectorComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A52281C948CDC00AE0E83 /* ColorInspectorComponentView.swift */; };
+		7D7A522E1C9491FA00AE0E83 /* UIColor+VVTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A522D1C9491FA00AE0E83 /* UIColor+VVTools.m */; };
 		7D8286771C93FF9E0001623C /* MediaPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286741C93FF9E0001623C /* MediaPicker.swift */; };
 		7D8286781C93FF9E0001623C /* MediaPickerLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286751C93FF9E0001623C /* MediaPickerLocalSource.swift */; };
 		7D8286791C93FF9E0001623C /* MediaPickerImportSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286761C93FF9E0001623C /* MediaPickerImportSource.swift */; };
@@ -44,6 +47,11 @@
 		7D7A52201C9461CD00AE0E83 /* ColorInspectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorInspectorViewController.swift; sourceTree = "<group>"; };
 		7D7A52221C9461F000AE0E83 /* ColorRepresentations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorRepresentations.swift; sourceTree = "<group>"; };
 		7D7A52241C94683E00AE0E83 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		7D7A52261C948CC000AE0E83 /* ColorInspectorComponentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorInspectorComponentView.xib; sourceTree = "<group>"; };
+		7D7A52281C948CDC00AE0E83 /* ColorInspectorComponentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorInspectorComponentView.swift; sourceTree = "<group>"; };
+		7D7A522B1C9491FA00AE0E83 /* BlurTester-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BlurTester-Bridging-Header.h"; sourceTree = "<group>"; };
+		7D7A522C1C9491FA00AE0E83 /* UIColor+VVTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+VVTools.h"; sourceTree = "<group>"; };
+		7D7A522D1C9491FA00AE0E83 /* UIColor+VVTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+VVTools.m"; sourceTree = "<group>"; };
 		7D8286741C93FF9E0001623C /* MediaPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPicker.swift; sourceTree = "<group>"; };
 		7D8286751C93FF9E0001623C /* MediaPickerLocalSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPickerLocalSource.swift; sourceTree = "<group>"; };
 		7D8286761C93FF9E0001623C /* MediaPickerImportSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPickerImportSource.swift; sourceTree = "<group>"; };
@@ -94,9 +102,11 @@
 				7D18FB971C93F31F006C13C6 /* Image Picker */,
 				7DB73FCB1C9402B400BDA7BA /* View Models */,
 				7D7A521B1C9461A400AE0E83 /* Inspectors */,
+				7D7A522A1C9491EB00AE0E83 /* Tools */,
 				7D18FB7D1C93DD14006C13C6 /* Main.storyboard */,
 				7D18FB801C93DD14006C13C6 /* Assets.xcassets */,
 				7D18FB821C93DD14006C13C6 /* LaunchScreen.storyboard */,
+				7D7A522B1C9491FA00AE0E83 /* BlurTester-Bridging-Header.h */,
 				7D18FB851C93DD14006C13C6 /* Info.plist */,
 			);
 			path = BlurTester;
@@ -119,8 +129,19 @@
 				7D7A521C1C9461B900AE0E83 /* BooleanInspectorViewController.swift */,
 				7D7A521E1C9461C400AE0E83 /* SelectionInspectorViewController.swift */,
 				7D7A52201C9461CD00AE0E83 /* ColorInspectorViewController.swift */,
+				7D7A52281C948CDC00AE0E83 /* ColorInspectorComponentView.swift */,
+				7D7A52261C948CC000AE0E83 /* ColorInspectorComponentView.xib */,
 			);
 			name = Inspectors;
+			sourceTree = "<group>";
+		};
+		7D7A522A1C9491EB00AE0E83 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				7D7A522C1C9491FA00AE0E83 /* UIColor+VVTools.h */,
+				7D7A522D1C9491FA00AE0E83 /* UIColor+VVTools.m */,
+			);
+			name = Tools;
 			sourceTree = "<group>";
 		};
 		7D9CB4181C93FB7D00602CDB /* Frameworks */ = {
@@ -204,6 +225,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D18FB841C93DD14006C13C6 /* LaunchScreen.storyboard in Resources */,
+				7D7A52271C948CC000AE0E83 /* ColorInspectorComponentView.xib in Resources */,
 				7D18FB811C93DD14006C13C6 /* Assets.xcassets in Resources */,
 				7D18FB7F1C93DD14006C13C6 /* Main.storyboard in Resources */,
 			);
@@ -223,9 +245,11 @@
 				7D7A521F1C9461C400AE0E83 /* SelectionInspectorViewController.swift in Sources */,
 				7D8286771C93FF9E0001623C /* MediaPicker.swift in Sources */,
 				7D7A52231C9461F000AE0E83 /* ColorRepresentations.swift in Sources */,
+				7D7A522E1C9491FA00AE0E83 /* UIColor+VVTools.m in Sources */,
 				7D7A52211C9461CD00AE0E83 /* ColorInspectorViewController.swift in Sources */,
 				7D1C016E1C9423C100E72C45 /* Inspector.swift in Sources */,
 				7D18FB7A1C93DD14006C13C6 /* AppDelegate.swift in Sources */,
+				7D7A52291C948CDC00AE0E83 /* ColorInspectorComponentView.swift in Sources */,
 				7D8286791C93FF9E0001623C /* MediaPickerImportSource.swift in Sources */,
 				7DB73FCD1C9404DB00BDA7BA /* SettingsViewModel.swift in Sources */,
 				7D7A52251C94683E00AE0E83 /* SettingsViewController.swift in Sources */,
@@ -342,12 +366,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = BlurTester/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.argentumko.BlurTester;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BlurTester/BlurTester-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -355,12 +382,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = BlurTester/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.argentumko.BlurTester;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BlurTester/BlurTester-Bridging-Header.h";
 			};
 			name = Release;
 		};

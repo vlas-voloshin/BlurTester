@@ -31,7 +31,15 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     override func didMoveToParentViewController(parent: UIViewController?) {
         super.didMoveToParentViewController(parent)
 
-        self.settingsViewController?.viewModel = settingsViewModel
+        settingsViewController?.viewModel = settingsViewModel
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if let swipeGesture = self.navigationController?.barHideOnSwipeGestureRecognizer {
+            contentView.addGestureRecognizer(swipeGesture)
+        }
     }
 
     private func presentImportFailedAlert() {
@@ -51,6 +59,8 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     private var mediaPicker: MediaPicker?
 
     @IBAction func chooseBackgroundImage(sender: AnyObject?) {
+        self.setSettingsViewControllerDisplayed(false, animated: true)
+
         let picker = MediaPicker(mediaType: .Photo)
         picker.delegate = self
         self.mediaPicker = picker
@@ -61,8 +71,8 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     @IBAction func exportComposition(sender: AnyObject?) {
         self.setSettingsViewControllerDisplayed(false, animated: true)
 
-        UIGraphicsBeginImageContextWithOptions(self.contentView.bounds.size, true, 0.0)
-        self.contentView.drawViewHierarchyInRect(self.contentView.bounds, afterScreenUpdates: true)
+        UIGraphicsBeginImageContextWithOptions(contentView.bounds.size, true, 0.0)
+        contentView.drawViewHierarchyInRect(contentView.bounds, afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
@@ -105,25 +115,25 @@ class MainViewController: UIViewController, MediaPickerDelegate {
         }
 
         let generalSettings = SettingsPageViewModel(name: "General", inspectors: [
-            BlurEffectStyleInspectorViewModel(name: "Blur", blurView: self.blurEffectView, vibrancyView: self.vibrancyEffectView, value: .Dark),
+            BlurEffectStyleInspectorViewModel(name: "Blur", blurView: blurEffectView, vibrancyView: self.vibrancyEffectView, value: .Dark),
             BarStyleInspectorViewModel.barStyleInspectorForNavigationBar(navigationBar, name: "Bar style")
             ])
         let backgroundSettings = SettingsPageViewModel(name: "Background", inspectors: [
-            ColorInspectorViewModel.backgroundColorInspectorForView(self.view, name: "Color")
+            ColorInspectorViewModel.backgroundColorInspectorForView(contentView, name: "Color")
             ])
         let underlaySettings = SettingsPageViewModel(name: "Underlay", inspectors: [
-            ColorInspectorViewModel.backgroundColorInspectorForView(self.blurEffectView, name: "Color")
+            ColorInspectorViewModel.backgroundColorInspectorForView(blurEffectView, name: "Color")
             ])
         let overlaySettings = SettingsPageViewModel(name: "Overlay", inspectors: [
-            ColorInspectorViewModel.backgroundColorInspectorForView(self.blurEffectView.contentView, name: "Color")
+            ColorInspectorViewModel.backgroundColorInspectorForView(blurEffectView.contentView, name: "Color")
             ])
         let normalTextSettings = SettingsPageViewModel(name: "Normal Text", inspectors: [
-            BooleanInspectorViewModel.visibilityInspectorForView(self.normalLabel, name: "Display"),
-            ColorInspectorViewModel.textColorInspectorForLabel(self.normalLabel, name: "Color")
+            BooleanInspectorViewModel.visibilityInspectorForView(normalLabel, name: "Display"),
+            ColorInspectorViewModel.textColorInspectorForLabel(normalLabel, name: "Color")
             ])
         let vibrantTextSettings = SettingsPageViewModel(name: "Vibrant Text", inspectors: [
-            BooleanInspectorViewModel.visibilityInspectorForView(self.vibrantLabel, name: "Display"),
-            ColorInspectorViewModel.textColorInspectorForLabel(self.vibrantLabel, name: "Color")
+            BooleanInspectorViewModel.visibilityInspectorForView(vibrantLabel, name: "Display"),
+            ColorInspectorViewModel.tintColorInspectorForView(vibrantLabel, name: "Color")
             ])
 
         return SettingsViewModel(pages: [ generalSettings, backgroundSettings, underlaySettings, overlaySettings, normalTextSettings, vibrantTextSettings ])
@@ -148,7 +158,7 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     // MARK: - Panel dragging
 
     private func blurredPanelHeightWithOffset(offset: CGFloat) -> CGFloat {
-        return self.view.bounds.height * blurredPanelProportionalHeightConstraint.multiplier + offset
+        return contentView.bounds.height * blurredPanelProportionalHeightConstraint.multiplier + offset
     }
 
     private var blurredPanelMinimumHeight = CGFloat(0)
@@ -157,7 +167,7 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     }
 
     private var blurredPanelMaximumHeight: CGFloat {
-        return self.view.bounds.height
+        return contentView.bounds.height
     }
     private var blurredPanelMaximumOffset: CGFloat {
         return blurredPanelMaximumHeight - blurredPanelHeightWithOffset(0.0)
@@ -175,7 +185,7 @@ class MainViewController: UIViewController, MediaPickerDelegate {
                 break
             }
 
-            let offset = initialOffset - sender.translationInView(self.view).y
+            let offset = initialOffset - sender.translationInView(contentView).y
             if offset < blurredPanelMinimumOffset {
                 blurredPanelProportionalHeightConstraint.constant = blurredPanelMinimumOffset
             } else if offset > blurredPanelMaximumOffset {

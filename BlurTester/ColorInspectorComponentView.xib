@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="iN0-l3-epB" customClass="ColorInspectorComponentView" customModule="BlurTester" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1yf-Rr-UXU">
+                    <rect key="frame" x="8" y="16" width="80" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="A6D-ow-hZx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="UnJ-d0-sY7">
+                    <rect key="frame" x="94" y="10" width="220" height="31"/>
+                    <connections>
+                        <action selector="slideValueChanged:" destination="iN0-l3-epB" eventType="valueChanged" id="GVF-rX-Nja"/>
+                    </connections>
+                </slider>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="UnJ-d0-sY7" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="ATl-7i-Yrd"/>
+                <constraint firstItem="1yf-Rr-UXU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="Nu9-mw-obA"/>
+                <constraint firstItem="UnJ-d0-sY7" firstAttribute="leading" secondItem="1yf-Rr-UXU" secondAttribute="trailing" constant="8" symbolic="YES" id="Qyf-O7-lGm"/>
+                <constraint firstItem="1yf-Rr-UXU" firstAttribute="centerY" secondItem="UnJ-d0-sY7" secondAttribute="centerY" id="bs8-HL-Nxg"/>
+                <constraint firstItem="UnJ-d0-sY7" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="sJU-Jk-Q5x"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="label" destination="1yf-Rr-UXU" id="wKC-zj-PgS"/>
+                <outlet property="slider" destination="UnJ-d0-sY7" id="gkL-bv-IWD"/>
+            </connections>
+        </view>
+    </objects>
+</document>

@@ -12,7 +12,9 @@ protocol ColorRepresentation {
 
     var color: UIColor { get set }
     var components: [CGFloat] { get set }
-    var componentTitles: [String] { get }
+    static var componentTitles: [String] { get }
+
+    init(color: UIColor)
 
 }
 
@@ -35,8 +37,12 @@ struct GrayscaleColorRepresentation: ColorRepresentation {
         }
     }
 
-    var components: [CGFloat]
-    let componentTitles = [ "White", "Alpha" ]
+    var components = [CGFloat]()
+    static let componentTitles = [ "White", "Alpha" ]
+
+    init(color: UIColor) {
+        self.color = color
+    }
 
 }
 
@@ -61,7 +67,26 @@ struct RGBColorRepresentation: ColorRepresentation {
         }
     }
 
-    var components: [CGFloat]
-    let componentTitles = [ "Red", "Green", "Blue", "Alpha" ]
+    var components = [CGFloat]()
+    static let componentTitles = [ "Red", "Green", "Blue", "Alpha" ]
 
+    init(color: UIColor) {
+        self.color = color
+    }
+
+}
+
+enum ColorRepresentationType {
+    case Grayscale
+    case RGB
+
+    func representationWithColor(color: UIColor) -> ColorRepresentation {
+        switch self {
+        case .Grayscale:
+            return GrayscaleColorRepresentation(color: color)
+
+        case .RGB:
+            return RGBColorRepresentation(color: color)
+        }
+    }
 }

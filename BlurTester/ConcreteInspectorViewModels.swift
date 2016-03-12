@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct ColorInspectorViewModel: KeyedInspectorViewModel {
+class ColorInspectorViewModel: KeyedInspectorViewModel {
 
     typealias ValueType = UIColor
 
@@ -17,6 +17,12 @@ struct ColorInspectorViewModel: KeyedInspectorViewModel {
     let inspectedKey: String
 
     let inspectorViewControllerIdentifier = "ColorInspector"
+
+    required init(name: String, inspectedObject: AnyObject, inspectedKey: String) {
+        self.name = name
+        self.inspectedObject = inspectedObject
+        self.inspectedKey = inspectedKey
+    }
 
     static func backgroundColorInspectorForView(view: UIView, name: String) -> ColorInspectorViewModel {
         return self.init(name: name, inspectedObject: view, inspectedKey: "backgroundColor")
@@ -32,7 +38,7 @@ struct ColorInspectorViewModel: KeyedInspectorViewModel {
 
 }
 
-struct BooleanInspectorViewModel: KeyedInspectorViewModel {
+class BooleanInspectorViewModel: KeyedInspectorViewModel {
 
     typealias ValueType = NSNumber
 
@@ -59,13 +65,20 @@ struct BooleanInspectorViewModel: KeyedInspectorViewModel {
         }
     }
 
+    required init(name: String, inspectedObject: AnyObject, inspectedKey: String, invert: Bool = false) {
+        self.name = name
+        self.inspectedObject = inspectedObject
+        self.inspectedKey = inspectedKey
+        self.invert = invert
+    }
+
     static func visibilityInspectorForView(view: UIView, name: String) -> BooleanInspectorViewModel {
         return self.init(name: name, inspectedObject: view, inspectedKey: "hidden", invert: true)
     }
     
 }
 
-struct BarStyleInspectorViewModel: KeyedInspectorViewModel, SelectableInspectorViewModel, SelectableInspectorViewModelWithValue {
+class BarStyleInspectorViewModel: KeyedInspectorViewModel, SelectableInspectorViewModel, SelectableInspectorViewModelWithValue {
 
     typealias ValueType = UIBarStyle
 
@@ -77,13 +90,19 @@ struct BarStyleInspectorViewModel: KeyedInspectorViewModel, SelectableInspectorV
     let values: [ValueType] = [ .Default, .Black ]
     let titlesMapping: [ValueType : String] = [ .Default : "Default", .Black : "Black" ]
 
+    required init(name: String, inspectedObject: AnyObject, inspectedKey: String) {
+        self.name = name
+        self.inspectedObject = inspectedObject
+        self.inspectedKey = inspectedKey
+    }
+
     static func barStyleInspectorForNavigationBar(navigationBar: UINavigationBar, name: String) -> BarStyleInspectorViewModel {
         return self.init(name: name, inspectedObject: navigationBar, inspectedKey: "barStyle")
     }
 
 }
 
-struct BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, SelectableInspectorViewModelWithValue {
+class BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, SelectableInspectorViewModelWithValue {
 
     typealias ValueType = UIBlurEffectStyle
 
@@ -103,5 +122,12 @@ struct BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, Selectab
     let inspectorViewControllerIdentifier = "SelectionInspector"
     let values: [ValueType] = [ .Dark, .Light, .ExtraLight ]
     let titlesMapping: [ValueType : String] = [ .Dark : "Dark", .Light : "Light", .ExtraLight : "Extra Light" ]
+
+    required init(name: String, blurView: UIVisualEffectView?, vibrancyView: UIVisualEffectView?, value: ValueType?) {
+        self.name = name
+        self.blurView = blurView
+        self.vibrancyView = vibrancyView
+        self.value = value
+    }
 
 }

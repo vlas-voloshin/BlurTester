@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol InspectorViewModel {
+protocol InspectorViewModel: class {
 
     var name: String { get }
     var inspectorViewControllerIdentifier: String { get }
