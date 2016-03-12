@@ -23,6 +23,14 @@ class MainViewController: UIViewController, MediaPickerDelegate {
         super.viewDidLoad()
 
         blurredPanelMinimumHeight = (blurredPanelProportionalHeightConstraint.firstItem as! UIView).systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+
+        loadSettings()
+    }
+
+    override func didMoveToParentViewController(parent: UIViewController?) {
+        super.didMoveToParentViewController(parent)
+
+        self.settingsViewController?.viewModel = settingsViewModel
     }
 
     private func presentImportFailedAlert() {
@@ -50,6 +58,8 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     }
 
     @IBAction func exportComposition(sender: AnyObject?) {
+        self.setSettingsViewControllerDisplayed(false, animated: true)
+
         UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, 0.0)
         self.view.drawViewHierarchyInRect(self.view.bounds, afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -60,7 +70,78 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     }
 
     @IBAction func openSettings(sender: AnyObject?) {
-        // TODO: complete
+        setSettingsViewControllerDisplayed(!settingsViewControllerDisplayed, animated: true)
+    }
+
+    // MARK: - Settings
+
+    private var settingsViewController: SettingsViewController?
+
+    private func loadSettings() {
+        guard let settings = self.storyboard!.instantiateViewControllerWithIdentifier("Settings") as? SettingsViewController else {
+            return
+        }
+
+        self.addChildViewController(settings)
+
+        let settingsView = settings.view
+        settingsView.alpha = 0.0
+        settingsView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(settingsView)
+
+        settingsView.leadingAnchor.constraintEqualToAnchor(self.view.leadingAnchor).active = true
+        settingsView.trailingAnchor.constraintEqualToAnchor(self.view.trailingAnchor).active = true
+        settingsView.topAnchor.constraintEqualToAnchor(self.topLayoutGuide.bottomAnchor).active = true
+        settingsView.heightAnchor.constraintEqualToConstant(settings.preferredContentSize.height).active = true
+
+        settings.didMoveToParentViewController(self)
+        settingsViewController = settings
+    }
+
+    private var settingsViewModel: SettingsViewModel? {
+        guard let navigationBar = self.navigationController?.navigationBar else {
+            return nil
+        }
+
+        let generalSettings = SettingsPageViewModel(name: "General", inspectors: [
+            BlurEffectStyleInspectorViewModel(name: "Blur", blurView: self.blurEffectView, vibrancyView: self.vibrancyEffectView, value: .Dark),
+            BarStyleInspectorViewModel.barStyleInspectorForNavigationBar(navigationBar, name: "Bar style")
+            ])
+        let backgroundSettings = SettingsPageViewModel(name: "Background", inspectors: [
+            ColorInspectorViewModel.backgroundColorInspectorForView(self.view, name: "Color")
+            ])
+        let underlaySettings = SettingsPageViewModel(name: "Underlay", inspectors: [
+            ColorInspectorViewModel.backgroundColorInspectorForView(self.blurEffectView, name: "Color")
+            ])
+        let overlaySettings = SettingsPageViewModel(name: "Overlay", inspectors: [
+            ColorInspectorViewModel.backgroundColorInspectorForView(self.blurEffectView.contentView, name: "Color")
+            ])
+        let normalTextSettings = SettingsPageViewModel(name: "Normal Text", inspectors: [
+            BooleanInspectorViewModel.visibilityInspectorForView(self.normalLabel, name: "Display"),
+            ColorInspectorViewModel.textColorInspectorForLabel(self.normalLabel, name: "Color")
+            ])
+        let vibrantTextSettings = SettingsPageViewModel(name: "Vibrant Text", inspectors: [
+            BooleanInspectorViewModel.visibilityInspectorForView(self.vibrantLabel, name: "Display"),
+            ColorInspectorViewModel.textColorInspectorForLabel(self.vibrantLabel, name: "Color")
+            ])
+
+        return SettingsViewModel(pages: [ generalSettings, backgroundSettings, underlaySettings, overlaySettings, normalTextSettings, vibrantTextSettings ])
+    }
+
+    private var settingsViewControllerDisplayed = false {
+        didSet {
+            settingsViewController?.view.alpha = settingsViewControllerDisplayed ? 1.0 : 0.0
+        }
+    }
+
+    private func setSettingsViewControllerDisplayed(displayed: Bool, animated: Bool) {
+        if animated {
+            UIView.animateWithDuration(0.3) {
+                self.settingsViewControllerDisplayed = displayed
+            }
+        } else {
+            self.settingsViewControllerDisplayed = displayed
+        }
     }
 
     // MARK: - Panel dragging

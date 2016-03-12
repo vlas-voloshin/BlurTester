@@ -28,22 +28,20 @@ protocol KeyedInspectorViewModel: InspectorViewModelWithValue {
     weak var inspectedObject: AnyObject? { get }
     var inspectedKey: String { get }
 
-    func transformValue(value: ValueType?) -> ValueType?
+    func transformKeyedValue(value: AnyObject?) -> ValueType?
+    func transformToKeyedValue(value: ValueType?) -> AnyObject?
 
 }
 
 extension KeyedInspectorViewModel {
 
-    func transformValue(value: ValueType?) -> ValueType? { return value }
-
-}
-
-extension KeyedInspectorViewModel where ValueType: AnyObject {
-
     var value: ValueType? {
-        get { return inspectedObject?.valueForKey(inspectedKey) as? ValueType }
-        set { inspectedObject?.setValue(value, forKey: inspectedKey) }
+        get { return transformKeyedValue(inspectedObject?.valueForKey(inspectedKey)) }
+        set { inspectedObject?.setValue(transformToKeyedValue(newValue), forKey: inspectedKey) }
     }
+
+    func transformKeyedValue(value: AnyObject?) -> ValueType? { return value as? ValueType }
+    func transformToKeyedValue(value: ValueType?) -> AnyObject? { return value as? AnyObject }
 
 }
 
@@ -54,7 +52,7 @@ extension KeyedInspectorViewModel where ValueType: RawRepresentable, ValueType.R
             let number = inspectedObject?.valueForKey(inspectedKey) as? NSNumber
             return number.flatMap { ValueType(rawValue: $0.integerValue) }
         }
-        set { inspectedObject?.setValue(value?.rawValue, forKey: inspectedKey) }
+        set { inspectedObject?.setValue(newValue?.rawValue, forKey: inspectedKey) }
     }
 
 }
@@ -75,7 +73,7 @@ protocol SelectableInspectorViewModelWithValue: InspectorViewModelWithValue {
 
 }
 
-extension SelectableInspectorViewModel where Self: SelectableInspectorViewModelWithValue {
+extension SelectableInspectorViewModelWithValue where Self: SelectableInspectorViewModel {
 
     var selectedOptionIndex: Int? {
         get {

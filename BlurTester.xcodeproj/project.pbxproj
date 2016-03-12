@@ -13,7 +13,12 @@
 		7D18FB811C93DD14006C13C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D18FB801C93DD14006C13C6 /* Assets.xcassets */; };
 		7D18FB841C93DD14006C13C6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D18FB821C93DD14006C13C6 /* LaunchScreen.storyboard */; };
 		7D1C016C1C94116500E72C45 /* ConcreteInspectorViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C016B1C94116500E72C45 /* ConcreteInspectorViewModels.swift */; };
-		7D1C016E1C9423C100E72C45 /* InspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C016D1C9423C100E72C45 /* InspectorViewController.swift */; };
+		7D1C016E1C9423C100E72C45 /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1C016D1C9423C100E72C45 /* Inspector.swift */; };
+		7D7A521D1C9461B900AE0E83 /* BooleanInspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A521C1C9461B900AE0E83 /* BooleanInspectorViewController.swift */; };
+		7D7A521F1C9461C400AE0E83 /* SelectionInspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A521E1C9461C400AE0E83 /* SelectionInspectorViewController.swift */; };
+		7D7A52211C9461CD00AE0E83 /* ColorInspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A52201C9461CD00AE0E83 /* ColorInspectorViewController.swift */; };
+		7D7A52231C9461F000AE0E83 /* ColorRepresentations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A52221C9461F000AE0E83 /* ColorRepresentations.swift */; };
+		7D7A52251C94683E00AE0E83 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7A52241C94683E00AE0E83 /* SettingsViewController.swift */; };
 		7D8286771C93FF9E0001623C /* MediaPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286741C93FF9E0001623C /* MediaPicker.swift */; };
 		7D8286781C93FF9E0001623C /* MediaPickerLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286751C93FF9E0001623C /* MediaPickerLocalSource.swift */; };
 		7D8286791C93FF9E0001623C /* MediaPickerImportSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8286761C93FF9E0001623C /* MediaPickerImportSource.swift */; };
@@ -33,7 +38,12 @@
 		7D18FB831C93DD14006C13C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D18FB851C93DD14006C13C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D1C016B1C94116500E72C45 /* ConcreteInspectorViewModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcreteInspectorViewModels.swift; sourceTree = "<group>"; };
-		7D1C016D1C9423C100E72C45 /* InspectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InspectorViewController.swift; sourceTree = "<group>"; };
+		7D1C016D1C9423C100E72C45 /* Inspector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
+		7D7A521C1C9461B900AE0E83 /* BooleanInspectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooleanInspectorViewController.swift; sourceTree = "<group>"; };
+		7D7A521E1C9461C400AE0E83 /* SelectionInspectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionInspectorViewController.swift; sourceTree = "<group>"; };
+		7D7A52201C9461CD00AE0E83 /* ColorInspectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorInspectorViewController.swift; sourceTree = "<group>"; };
+		7D7A52221C9461F000AE0E83 /* ColorRepresentations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorRepresentations.swift; sourceTree = "<group>"; };
+		7D7A52241C94683E00AE0E83 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		7D8286741C93FF9E0001623C /* MediaPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPicker.swift; sourceTree = "<group>"; };
 		7D8286751C93FF9E0001623C /* MediaPickerLocalSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPickerLocalSource.swift; sourceTree = "<group>"; };
 		7D8286761C93FF9E0001623C /* MediaPickerImportSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPickerImportSource.swift; sourceTree = "<group>"; };
@@ -80,8 +90,10 @@
 			children = (
 				7D18FB791C93DD14006C13C6 /* AppDelegate.swift */,
 				7D18FB7B1C93DD14006C13C6 /* MainViewController.swift */,
+				7D7A52241C94683E00AE0E83 /* SettingsViewController.swift */,
 				7D18FB971C93F31F006C13C6 /* Image Picker */,
-				7DB73FCB1C9402B400BDA7BA /* Settings */,
+				7DB73FCB1C9402B400BDA7BA /* View Models */,
+				7D7A521B1C9461A400AE0E83 /* Inspectors */,
 				7D18FB7D1C93DD14006C13C6 /* Main.storyboard */,
 				7D18FB801C93DD14006C13C6 /* Assets.xcassets */,
 				7D18FB821C93DD14006C13C6 /* LaunchScreen.storyboard */,
@@ -100,6 +112,17 @@
 			name = "Image Picker";
 			sourceTree = "<group>";
 		};
+		7D7A521B1C9461A400AE0E83 /* Inspectors */ = {
+			isa = PBXGroup;
+			children = (
+				7D1C016D1C9423C100E72C45 /* Inspector.swift */,
+				7D7A521C1C9461B900AE0E83 /* BooleanInspectorViewController.swift */,
+				7D7A521E1C9461C400AE0E83 /* SelectionInspectorViewController.swift */,
+				7D7A52201C9461CD00AE0E83 /* ColorInspectorViewController.swift */,
+			);
+			name = Inspectors;
+			sourceTree = "<group>";
+		};
 		7D9CB4181C93FB7D00602CDB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,15 +133,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7DB73FCB1C9402B400BDA7BA /* Settings */ = {
+		7DB73FCB1C9402B400BDA7BA /* View Models */ = {
 			isa = PBXGroup;
 			children = (
 				7DB73FCC1C9404DB00BDA7BA /* SettingsViewModel.swift */,
 				7DB73FCE1C9404EF00BDA7BA /* InspectorViewModel.swift */,
 				7D1C016B1C94116500E72C45 /* ConcreteInspectorViewModels.swift */,
-				7D1C016D1C9423C100E72C45 /* InspectorViewController.swift */,
+				7D7A52221C9461F000AE0E83 /* ColorRepresentations.swift */,
 			);
-			name = Settings;
+			name = "View Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,11 +219,16 @@
 				7D18FB7C1C93DD14006C13C6 /* MainViewController.swift in Sources */,
 				7DB73FCF1C9404EF00BDA7BA /* InspectorViewModel.swift in Sources */,
 				7D8286781C93FF9E0001623C /* MediaPickerLocalSource.swift in Sources */,
+				7D7A521D1C9461B900AE0E83 /* BooleanInspectorViewController.swift in Sources */,
+				7D7A521F1C9461C400AE0E83 /* SelectionInspectorViewController.swift in Sources */,
 				7D8286771C93FF9E0001623C /* MediaPicker.swift in Sources */,
-				7D1C016E1C9423C100E72C45 /* InspectorViewController.swift in Sources */,
+				7D7A52231C9461F000AE0E83 /* ColorRepresentations.swift in Sources */,
+				7D7A52211C9461CD00AE0E83 /* ColorInspectorViewController.swift in Sources */,
+				7D1C016E1C9423C100E72C45 /* Inspector.swift in Sources */,
 				7D18FB7A1C93DD14006C13C6 /* AppDelegate.swift in Sources */,
 				7D8286791C93FF9E0001623C /* MediaPickerImportSource.swift in Sources */,
 				7DB73FCD1C9404DB00BDA7BA /* SettingsViewModel.swift in Sources */,
+				7D7A52251C94683E00AE0E83 /* SettingsViewController.swift in Sources */,
 				7D1C016C1C94116500E72C45 /* ConcreteInspectorViewModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

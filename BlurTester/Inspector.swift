@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Inspector {
+protocol Inspector: class {
 
     var viewModel: InspectorViewModel? { get set }
 

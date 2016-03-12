@@ -26,6 +26,10 @@ struct ColorInspectorViewModel: KeyedInspectorViewModel {
         return self.init(name: name, inspectedObject: view, inspectedKey: "tintColor")
     }
 
+    static func textColorInspectorForLabel(label: UILabel, name: String) -> ColorInspectorViewModel {
+        return self.init(name: name, inspectedObject: label, inspectedKey: "textColor")
+    }
+
 }
 
 struct BooleanInspectorViewModel: KeyedInspectorViewModel {
@@ -39,7 +43,15 @@ struct BooleanInspectorViewModel: KeyedInspectorViewModel {
 
     let inspectorViewControllerIdentifier = "BooleanInspector"
 
-    func transformValue(value: NSNumber?) -> NSNumber? {
+    func transformKeyedValue(value: AnyObject?) -> ValueType? {
+        if invert {
+            return !((value as? ValueType)?.boolValue ?? false)
+        } else {
+            return value as? ValueType
+        }
+    }
+
+    func transformToKeyedValue(value: ValueType?) -> AnyObject? {
         if invert {
             return !(value?.boolValue ?? false)
         } else {
@@ -62,8 +74,8 @@ struct BarStyleInspectorViewModel: KeyedInspectorViewModel, SelectableInspectorV
     let inspectedKey: String
 
     let inspectorViewControllerIdentifier = "SelectionInspector"
-    let values: [UIBarStyle] = [ .Default, .Black ]
-    let titlesMapping: [UIBarStyle : String] = [ .Default : "Default", .Black : "Black" ]
+    let values: [ValueType] = [ .Default, .Black ]
+    let titlesMapping: [ValueType : String] = [ .Default : "Default", .Black : "Black" ]
 
     static func barStyleInspectorForNavigationBar(navigationBar: UINavigationBar, name: String) -> BarStyleInspectorViewModel {
         return self.init(name: name, inspectedObject: navigationBar, inspectedKey: "barStyle")
@@ -78,7 +90,7 @@ struct BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, Selectab
     let name: String
     weak var blurView: UIVisualEffectView?
     weak var vibrancyView: UIVisualEffectView?
-    var value: UIBlurEffectStyle? {
+    var value: ValueType? {
         didSet {
             let blurEffect = value.flatMap { UIBlurEffect(style: $0) }
             let vibrancyEffect = blurEffect.flatMap { UIVibrancyEffect(forBlurEffect: $0) }
@@ -89,7 +101,7 @@ struct BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, Selectab
     }
 
     let inspectorViewControllerIdentifier = "SelectionInspector"
-    let values: [UIBlurEffectStyle] = [ .Dark, .Light, .ExtraLight ]
-    let titlesMapping: [UIBlurEffectStyle : String] = [ .Dark : "Dark", .Light : "Light", .ExtraLight : "Extra Light" ]
+    let values: [ValueType] = [ .Dark, .Light, .ExtraLight ]
+    let titlesMapping: [ValueType : String] = [ .Dark : "Dark", .Light : "Light", .ExtraLight : "Extra Light" ]
 
 }
