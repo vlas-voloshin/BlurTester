@@ -10,6 +10,7 @@ import UIKit
 
 class MainViewController: UIViewController, MediaPickerDelegate {
 
+    @IBOutlet var contentView: UIView!
     @IBOutlet var backgroundImageView: UIImageView!
     @IBOutlet var tutorialLabel: UILabel!
     @IBOutlet var blurEffectView: UIVisualEffectView!
@@ -60,8 +61,8 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     @IBAction func exportComposition(sender: AnyObject?) {
         self.setSettingsViewControllerDisplayed(false, animated: true)
 
-        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, 0.0)
-        self.view.drawViewHierarchyInRect(self.view.bounds, afterScreenUpdates: true)
+        UIGraphicsBeginImageContextWithOptions(self.contentView.bounds.size, true, 0.0)
+        self.contentView.drawViewHierarchyInRect(self.contentView.bounds, afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
