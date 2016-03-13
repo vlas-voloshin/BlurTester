@@ -129,11 +129,11 @@ class MainViewController: UIViewController, MediaPickerDelegate {
             ])
         let normalTextSettings = SettingsPageViewModel(name: "Normal Text", inspectors: [
             BooleanInspectorViewModel.visibilityInspectorForView(normalLabel, name: "Display"),
-            ColorInspectorViewModel.textColorInspectorForLabel(normalLabel, name: "Color")
+            ColorInspectorViewModel.textColorInspectorForLabel(normalLabel, name: "Text Color")
             ])
         let vibrantTextSettings = SettingsPageViewModel(name: "Vibrant Text", inspectors: [
             BooleanInspectorViewModel.visibilityInspectorForView(vibrantLabel, name: "Display"),
-            ColorInspectorViewModel.tintColorInspectorForView(vibrantLabel, name: "Color")
+            ColorInspectorViewModel.tintColorInspectorForView(vibrantLabel, name: "Tint Color")
             ])
 
         return SettingsViewModel(pages: [ generalSettings, backgroundSettings, underlaySettings, overlaySettings, normalTextSettings, vibrantTextSettings ])

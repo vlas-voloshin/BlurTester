@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AhP-LF-FkH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10112" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AhP-LF-FkH">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10083"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -22,7 +22,7 @@
             </objects>
             <point key="canvasLocation" x="-436" y="358"/>
         </scene>
-        <!--Main View Controller-->
+        <!--Visual Effects-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="BlurTester" customModuleProvider="target" sceneMemberID="viewController">
@@ -138,7 +138,7 @@ Tap the gear icon to adjust colors.</string>
                             <constraint firstAttribute="trailing" secondItem="fdy-Wp-cap" secondAttribute="trailing" id="yMG-cP-rtj"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="2Fv-qr-C34">
+                    <navigationItem key="navigationItem" title="Visual Effects" id="2Fv-qr-C34">
                         <barButtonItem key="leftBarButtonItem" systemItem="action" id="idd-5v-kSf">
                             <connections>
                                 <action selector="exportComposition:" destination="BYZ-38-t0r" id="mQc-wC-exj"/>
