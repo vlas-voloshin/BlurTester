@@ -7,33 +7,30 @@
 //
 
 import UIKit
+import MobileCoreServices
 
 class MediaPickerImportSource: NSObject, MediaPickerSource, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
     
-    let mediaType: MediaPicker.MediaType
-
-    required init(mediaType: MediaPicker.MediaType) {
-        self.mediaType = mediaType
-        
-        super.init()
-    }
-    
     var delegate: MediaPickerSourceDelegate?
     var actionTitle: String {
-        return mediaType.actionStringForDocumentPicker()
+        return NSLocalizedString("Import Photo", comment: "Media Picker option")
     }
     
     private weak var presentingViewController: UIViewController?
+
+    required override init() {
+        super.init()
+    }
     
-    static func mediaPickerSourcesForMediaType(mediaType: MediaPicker.MediaType) -> [MediaPickerSource] {
+    static func mediaPickerSources() -> [MediaPickerSource] {
         // "Import" option is always available
-        return [ self.init(mediaType: mediaType) ]
+        return [ self.init() ]
     }
     
     func presentInViewController(viewController: UIViewController) {
         presentingViewController = viewController
         
-        let documentMenu = UIDocumentMenuViewController(documentTypes: [ mediaType.UTI ], inMode: .Import)
+        let documentMenu = UIDocumentMenuViewController(documentTypes: [ kUTTypeImage as String ], inMode: .Import)
         documentMenu.delegate = self
         
         viewController.presentViewController(documentMenu, animated: true, completion: nil)
@@ -59,14 +56,11 @@ class MediaPickerImportSource: NSObject, MediaPickerSource, UIDocumentMenuDelega
     
     func documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL url: NSURL) {
         let result: MediaPicker.Result
-        switch self.mediaType {
-        case .Photo:
-            // Load the imported image
-            if let imageData = NSData(contentsOfURL: url), image = UIImage(data: imageData) {
-                result = .Photo(image: image)
-            } else {
-                result = .ImportFailed
-            }
+        // Load the imported image
+        if let imageData = NSData(contentsOfURL: url), image = UIImage(data: imageData) {
+            result = .Photo(image: image)
+        } else {
+            result = .ImportFailed
         }
         
         self.delegate?.mediaPickerSource(self, didFinishWithResult: result, presentedNavigationController: nil)
@@ -76,17 +70,4 @@ class MediaPickerImportSource: NSObject, MediaPickerSource, UIDocumentMenuDelega
         self.delegate?.mediaPickerSource(self, didFinishWithResult: .Cancelled, presentedNavigationController: nil)
     }
 
-}
-
-// MARK: - MediaType extension
-
-extension MediaPicker.MediaType {
-    
-    private func actionStringForDocumentPicker() -> String {
-        switch self {
-        case .Photo:
-            return NSLocalizedString("Import Photo", comment: "Media Picker option")
-        }
-    }
-    
 }

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MobileCoreServices
 
 protocol MediaPickerDelegate: class {
     
@@ -16,12 +15,6 @@ protocol MediaPickerDelegate: class {
 }
 
 class MediaPicker: MediaPickerSourceDelegate {
-    
-    /// Specifies the media type and requirements for the picker.
-    enum MediaType {
-        /// Specifies a photo as the picked media.
-        case Photo
-    }
     
     /// Specifies the result of media picker
     enum Result {
@@ -33,22 +26,17 @@ class MediaPicker: MediaPickerSourceDelegate {
         case Cancelled
     }
     
-    let mediaType: MediaType
     var delegate: MediaPickerDelegate?
     
     private weak var presentingViewController: UIViewController?
     private var presentedSource: MediaPickerSource?
-    
-    init(mediaType: MediaType) {
-        self.mediaType = mediaType
-    }
     
     func presentPickerFromViewController(viewController: UIViewController) {
         self.presentingViewController = viewController
         
         let sourceClasses = [ MediaPickerLocalSource.self, MediaPickerImportSource.self ] as [MediaPickerSource.Type]
         let sourceActions = sourceClasses
-            .flatMap { $0.mediaPickerSourcesForMediaType(self.mediaType) }
+            .flatMap { $0.mediaPickerSources() }
             .map { source in
                 UIAlertAction(title: source.actionTitle, style: .Default) { _ in
                     self.presentSource(source)
@@ -89,16 +77,6 @@ class MediaPicker: MediaPickerSourceDelegate {
     
     // MARK: Postprocessing
     
-    private func processSourceResult(result: Result, withPresentedNavigationController navigationController: UINavigationController?) {
-        switch (result, mediaType) {
-        case (.Photo, .Photo):
-            completeWithResult(result, afterDismissingViewController: navigationController)
-
-        case let (otherResult, otherMediaType):
-            preconditionFailure("Media picker source result \(otherResult) doesn't match media type \(otherMediaType).")
-        }
-    }
-
     private static func performAfterDismissingViewController(viewController: UIViewController?, block: (Void) -> Void) {
         if let viewController = viewController, presentingViewController = viewController.presentingViewController {
             // Dismiss the provided view controller first
@@ -120,27 +98,9 @@ class MediaPicker: MediaPickerSourceDelegate {
         
         self.presentedSource = nil
         
-        switch result {
-        case .Photo:
-            processSourceResult(result, withPresentedNavigationController: navigationController)
-        case .ImportFailed, .Cancelled:
-            completeWithResult(result, afterDismissingViewController: navigationController)
-        }
+        completeWithResult(result, afterDismissingViewController: navigationController)
     }
 
-}
-
-// MARK: - MediaType extension
-
-extension MediaPicker.MediaType {
-    
-    var UTI: String {
-        switch self {
-        case .Photo:
-            return kUTTypeImage as String
-        }
-    }
-    
 }
 
 // MARK: - Source definitions
@@ -153,7 +113,7 @@ protocol MediaPickerSource: class {
     var delegate: MediaPickerSourceDelegate? { get set }
     
     /// Returns an array of picker sources applicable to the specified media type.
-    static func mediaPickerSourcesForMediaType(mediaType: MediaPicker.MediaType) -> [MediaPickerSource]
+    static func mediaPickerSources() -> [MediaPickerSource]
     
     /// Presents UI of the picker source from the specified view controller.
     func presentInViewController(viewController: UIViewController)

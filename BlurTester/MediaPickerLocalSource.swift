@@ -9,14 +9,13 @@
 import UIKit
 import AVFoundation
 import Photos
+import MobileCoreServices
 
 class MediaPickerLocalSource: NSObject, MediaPickerSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    let mediaType: MediaPicker.MediaType
     let sourceType: UIImagePickerControllerSourceType
-    
-    required init(mediaType: MediaPicker.MediaType, sourceType: UIImagePickerControllerSourceType) {
-        self.mediaType = mediaType
+
+    required init(sourceType: UIImagePickerControllerSourceType) {
         self.sourceType = sourceType
 
         super.init()
@@ -24,14 +23,14 @@ class MediaPickerLocalSource: NSObject, MediaPickerSource, UIImagePickerControll
     
     var delegate: MediaPickerSourceDelegate?
     var actionTitle: String {
-        return mediaType.actionStringForPickerSourceType(sourceType)
+        return self.dynamicType.actionStringForPickerSourceType(sourceType)
     }
     
-    static func mediaPickerSourcesForMediaType(mediaType: MediaPicker.MediaType) -> [MediaPickerSource] {
+    static func mediaPickerSources() -> [MediaPickerSource] {
         let possibleSourceTypes = [ .Camera, .PhotoLibrary ] as [UIImagePickerControllerSourceType]
-        let availableSourceTypes = possibleSourceTypes.filter { self.shouldShowImagePickerSourceType($0, withMediaType: mediaType) }
+        let availableSourceTypes = possibleSourceTypes.filter { self.shouldShowImagePickerSourceType($0) }
         
-        return availableSourceTypes.map { self.init(mediaType: mediaType, sourceType: $0) }
+        return availableSourceTypes.map { self.init(sourceType: $0) }
     }
     
     func presentInViewController(viewController: UIViewController) {
@@ -52,7 +51,8 @@ class MediaPickerLocalSource: NSObject, MediaPickerSource, UIImagePickerControll
         }
         
         let imagePicker = UIImagePickerController()
-        mediaType.configureImagePicker(imagePicker)
+        imagePicker.mediaTypes = [ kUTTypeImage as String ]
+        imagePicker.allowsEditing = false
         imagePicker.sourceType = sourceType
         imagePicker.delegate = self
         viewController.presentViewController(imagePicker, animated: true, completion: nil)
@@ -89,13 +89,13 @@ class MediaPickerLocalSource: NSObject, MediaPickerSource, UIImagePickerControll
         }
     }
     
-    private static func shouldShowImagePickerSourceType(sourceType: UIImagePickerControllerSourceType, withMediaType mediaType: MediaPicker.MediaType) -> Bool {
+    private static func shouldShowImagePickerSourceType(sourceType: UIImagePickerControllerSourceType) -> Bool {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
             return false
         }
         
         let mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(sourceType)
-        return mediaTypes?.contains(mediaType.UTI) ?? false
+        return mediaTypes?.contains(kUTTypeImage as String) ?? false
     }
     
     private static func presentCameraAccessDeniedAlertFromViewController(viewController: UIViewController, withCompletion completion: (Void) -> Void) {
@@ -118,57 +118,34 @@ class MediaPickerLocalSource: NSObject, MediaPickerSource, UIImagePickerControll
         
         viewController.presentViewController(alert, animated: true, completion: nil)
     }
-    
+
+    private static func actionStringForPickerSourceType(sourceType: UIImagePickerControllerSourceType) -> String {
+        switch sourceType {
+        case .Camera:
+            return NSLocalizedString("Take Photo", comment: "Media Picker option")
+
+        case .PhotoLibrary, .SavedPhotosAlbum:
+            return NSLocalizedString("Choose Photo", comment: "Media Picker option")
+        }
+    }
+
     // MARK: UIImagePickerControllerDelegate
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        switch self.mediaType {
-        case .Photo:
-            if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                completeWithResult(.Photo(image: originalImage), picker: picker)
-            } else if let originalImageURL = info[UIImagePickerControllerReferenceURL] as? NSURL {
-                // There seem to be scenarios where only image URL would be contained in the result...
-                print("Image picker returned asset URL instead of original image.")
-                completeWithImageAssetURL(originalImageURL, fromPicker: picker)
-            } else {
-                assertionFailure("Expecting either original image or asset URL from image picker.")
-                completeWithResult(.ImportFailed, picker: picker)
-            }
+        if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            completeWithResult(.Photo(image: originalImage), picker: picker)
+        } else if let originalImageURL = info[UIImagePickerControllerReferenceURL] as? NSURL {
+            // There seem to be scenarios where only image URL would be contained in the result...
+            print("Image picker returned asset URL instead of original image.")
+            completeWithImageAssetURL(originalImageURL, fromPicker: picker)
+        } else {
+            assertionFailure("Expecting either original image or asset URL from image picker.")
+            completeWithResult(.ImportFailed, picker: picker)
         }
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         completeWithResult(.Cancelled, picker: picker)
-    }
-    
-}
-
-// MARK: - MediaType extension
-
-extension MediaPicker.MediaType {
-    
-    private func actionStringForPickerSourceType(sourceType: UIImagePickerControllerSourceType) -> String {
-        switch sourceType {
-        case .Camera:
-            switch self {
-            case .Photo:
-                return NSLocalizedString("Take Photo", comment: "Media Picker option")
-            }
-            
-        case .PhotoLibrary, .SavedPhotosAlbum:
-            switch self {
-            case .Photo:
-                return NSLocalizedString("Choose Photo", comment: "Media Picker option")
-            }
-        }
-    }
-    
-    private func configureImagePicker(imagePicker: UIImagePickerController) {
-        imagePicker.mediaTypes = [ self.UTI ]
-        switch self {
-        case .Photo:
-            imagePicker.allowsEditing = false
-        }
     }
     
 }

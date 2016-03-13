@@ -61,7 +61,7 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     @IBAction func chooseBackgroundImage(sender: AnyObject?) {
         self.setSettingsViewControllerDisplayed(false, animated: true)
 
-        let picker = MediaPicker(mediaType: .Photo)
+        let picker = MediaPicker()
         picker.delegate = self
         self.mediaPicker = picker
 
