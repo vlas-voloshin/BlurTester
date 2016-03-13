@@ -177,6 +177,7 @@
 				7D18FB721C93DD14006C13C6 /* Sources */,
 				7D18FB731C93DD14006C13C6 /* Frameworks */,
 				7D18FB741C93DD14006C13C6 /* Resources */,
+				7D93E0A51C955791006067FC /* Set Build Version */,
 			);
 			buildRules = (
 			);
@@ -239,6 +240,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7D93E0A51C955791006067FC /* Set Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Set Build Version";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/version.sh\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7D18FB721C93DD14006C13C6 /* Sources */ = {
