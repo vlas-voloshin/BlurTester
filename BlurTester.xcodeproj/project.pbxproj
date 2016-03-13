@@ -33,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7D05DF6C1C953C0700DCF702 /* BlurTester.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BlurTester.entitlements; sourceTree = "<group>"; };
 		7D18FB761C93DD14006C13C6 /* BlurTester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlurTester.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D18FB791C93DD14006C13C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D18FB7B1C93DD14006C13C6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +108,7 @@
 				7D18FB801C93DD14006C13C6 /* Assets.xcassets */,
 				7D18FB821C93DD14006C13C6 /* LaunchScreen.storyboard */,
 				7D7A522B1C9491FA00AE0E83 /* BlurTester-Bridging-Header.h */,
+				7D05DF6C1C953C0700DCF702 /* BlurTester.entitlements */,
 				7D18FB851C93DD14006C13C6 /* Info.plist */,
 			);
 			path = BlurTester;
@@ -198,6 +200,11 @@
 					7D18FB751C93DD14006C13C6 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = S39FJ4UZ8V;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -367,6 +374,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BlurTester/BlurTester.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = BlurTester/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -383,6 +391,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = BlurTester/BlurTester.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = BlurTester/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
