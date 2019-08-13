@@ -18,7 +18,7 @@ class SettingsViewController: UIViewController {
             currentInspectorPageNumber = nil
         }
         didSet {
-            if let viewModel = viewModel where viewModel.pages.isEmpty == false {
+            if let viewModel = viewModel, viewModel.pages.isEmpty == false {
                 currentInspectorPageNumber = 0
             }
         }
@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController {
             if let page = currentInspectorPage {
                 pageNameLabel.text = page.name
                 currentInspectorViewControllers = page.inspectors.map { viewModel in
-                    let viewController = self.storyboard!.instantiateViewControllerWithIdentifier(viewModel.inspectorViewControllerIdentifier)
+                    let viewController = self.storyboard!.instantiateViewController(withIdentifier: viewModel.inspectorViewControllerIdentifier)
                     if let inspector = viewController as? Inspector {
                         inspector.viewModel = viewModel
                     }
@@ -46,7 +46,7 @@ class SettingsViewController: UIViewController {
 
     private var currentInspectorPage: SettingsPageViewModel? {
         get {
-            if let viewModel = viewModel, pageNumber = currentInspectorPageNumber {
+            if let viewModel = viewModel, let pageNumber = currentInspectorPageNumber {
                 return viewModel.pages[pageNumber]
             } else {
                 return nil
@@ -57,31 +57,31 @@ class SettingsViewController: UIViewController {
     private var currentInspectorViewControllers = [UIViewController]() {
         willSet {
             for viewController in currentInspectorViewControllers {
-                viewController.willMoveToParentViewController(nil)
+                viewController.willMove(toParent: nil)
                 viewController.view.removeFromSuperview()
-                viewController.removeFromParentViewController()
+                viewController.removeFromParent()
             }
         }
         didSet {
             for viewController in currentInspectorViewControllers {
-                self.addChildViewController(viewController)
+                self.addChild(viewController)
 
-                let inspectorView = viewController.view
-                inspectorView.backgroundColor = UIColor.clearColor()
+                let inspectorView = viewController.view!
+                inspectorView.backgroundColor = .clear
                 inspectorView.translatesAutoresizingMaskIntoConstraints = false
                 inspectorsStackView.addArrangedSubview(inspectorView)
 
-                inspectorView.heightAnchor.constraintEqualToConstant(viewController.preferredContentSize.height).active = true
+                inspectorView.heightAnchor.constraint(equalToConstant: viewController.preferredContentSize.height).isActive = true
 
-                viewController.didMoveToParentViewController(self)
+                viewController.didMove(toParent: self)
             }
         }
     }
 
     // MARK: - Actions
 
-    @IBAction func showPreviousPage(sender: AnyObject?) {
-        guard let viewModel = viewModel, currentPageNumber = currentInspectorPageNumber else {
+    @IBAction func showPreviousPage(_ sender: Any?) {
+        guard let viewModel = viewModel, let currentPageNumber = currentInspectorPageNumber else {
             return
         }
 
@@ -92,8 +92,8 @@ class SettingsViewController: UIViewController {
         }
     }
 
-    @IBAction func showNextPage(sender: AnyObject?) {
-        guard let viewModel = viewModel, currentPageNumber = currentInspectorPageNumber else {
+    @IBAction func showNextPage(_ sender: Any?) {
+        guard let viewModel = viewModel, let currentPageNumber = currentInspectorPageNumber else {
             return
         }
 

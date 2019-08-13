@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol ColorInspectorComponentViewDelegate: class {
-    func colorInspectorComponentView(componentView: ColorInspectorComponentView, didChangeValue value: Float)
+protocol ColorInspectorComponentViewDelegate: AnyObject {
+    func colorInspectorComponentView(_ componentView: ColorInspectorComponentView, didChangeValue value: Float)
 }
 
 class ColorInspectorComponentView: UIView {
@@ -19,7 +19,7 @@ class ColorInspectorComponentView: UIView {
 
     weak var delegate: ColorInspectorComponentViewDelegate?
 
-    @IBAction func slideValueChanged(slider: UISlider!) {
+    @IBAction func slideValueChanged(_ slider: UISlider!) {
         delegate?.colorInspectorComponentView(self, didChangeValue: slider.value)
     }
 

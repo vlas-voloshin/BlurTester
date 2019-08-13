@@ -28,7 +28,7 @@ class SelectionInspectorViewController: UIViewController, Inspector {
 
     var selectionViewModel: SelectableInspectorViewModel? {
         didSet {
-            if self.isViewLoaded() {
+            if self.isViewLoaded {
                 configureWithViewModel(selectionViewModel)
             }
         }
@@ -40,20 +40,20 @@ class SelectionInspectorViewController: UIViewController, Inspector {
         configureWithViewModel(selectionViewModel)
     }
 
-    private func configureWithViewModel(viewModel: SelectableInspectorViewModel?) {
+    private func configureWithViewModel(_ viewModel: SelectableInspectorViewModel?) {
         titleLabel.text = selectionViewModel?.name
 
         segmentedControl.removeAllSegments()
         if let viewModel = selectionViewModel {
-            for (index, title) in viewModel.titles.enumerate() {
-                segmentedControl.insertSegmentWithTitle(title, atIndex: index, animated: false)
+            for (index, title) in viewModel.titles.enumerated() {
+                segmentedControl.insertSegment(withTitle: title, at: index, animated: false)
             }
 
-            segmentedControl.selectedSegmentIndex = viewModel.selectedOptionIndex ?? UISegmentedControlNoSegment
+            segmentedControl.selectedSegmentIndex = viewModel.selectedOptionIndex ?? UISegmentedControl.noSegment
         }
     }
 
-    @IBAction func segmentedControlValueChanged(sender: UISegmentedControl!) {
+    @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl!) {
         selectionViewModel?.selectedOptionIndex = sender.selectedSegmentIndex
     }
     

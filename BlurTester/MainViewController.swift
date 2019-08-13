@@ -23,18 +23,18 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        blurredPanelMinimumHeight = (blurredPanelProportionalHeightConstraint.firstItem as! UIView).systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+        blurredPanelMinimumHeight = (blurredPanelProportionalHeightConstraint.firstItem as! UIView).systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
 
         loadSettings()
     }
 
-    override func didMoveToParentViewController(parent: UIViewController?) {
-        super.didMoveToParentViewController(parent)
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
 
         settingsViewController?.viewModel = settingsViewModel
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         if let swipeGesture = self.navigationController?.barHideOnSwipeGestureRecognizer {
@@ -46,41 +46,41 @@ class MainViewController: UIViewController, MediaPickerDelegate {
         let alert = UIAlertController(
             title: NSLocalizedString("Import failed", comment: "File import failed error title"),
             message: NSLocalizedString("Imported file is corrupted or unsupported.", comment: "File import failed error message"),
-            preferredStyle: .Alert)
+            preferredStyle: .alert)
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("Dismiss", comment: ""),
-            style: .Cancel,
+            style: .cancel,
             handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
 
     // MARK: - Actions
 
     private var mediaPicker: MediaPicker?
 
-    @IBAction func chooseBackgroundImage(sender: AnyObject?) {
+    @IBAction func chooseBackgroundImage(_ sender: Any?) {
         self.setSettingsViewControllerDisplayed(false, animated: true)
 
         let picker = MediaPicker()
         picker.delegate = self
         self.mediaPicker = picker
 
-        picker.presentPickerFromViewController(self)
+        picker.presentPicker(from: self)
     }
 
-    @IBAction func exportComposition(sender: AnyObject?) {
+    @IBAction func exportComposition(_ sender: Any?) {
         self.setSettingsViewControllerDisplayed(false, animated: true)
 
         UIGraphicsBeginImageContextWithOptions(contentView.bounds.size, true, 0.0)
-        contentView.drawViewHierarchyInRect(contentView.bounds, afterScreenUpdates: true)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
+        contentView.drawHierarchy(in: contentView.bounds, afterScreenUpdates: true)
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
 
         let activityController = UIActivityViewController(activityItems: [ image ], applicationActivities: nil)
-        self.presentViewController(activityController, animated: true, completion: nil)
+        self.present(activityController, animated: true, completion: nil)
     }
 
-    @IBAction func openSettings(sender: AnyObject?) {
+    @IBAction func openSettings(_ sender: Any?) {
         setSettingsViewControllerDisplayed(!settingsViewControllerDisplayed, animated: true)
     }
 
@@ -89,23 +89,25 @@ class MainViewController: UIViewController, MediaPickerDelegate {
     private var settingsViewController: SettingsViewController?
 
     private func loadSettings() {
-        guard let settings = self.storyboard!.instantiateViewControllerWithIdentifier("Settings") as? SettingsViewController else {
+        guard let settings = self.storyboard!.instantiateViewController(withIdentifier: "Settings") as? SettingsViewController else {
             return
         }
 
-        self.addChildViewController(settings)
+        self.addChild(settings)
 
-        let settingsView = settings.view
+        let settingsView = settings.view!
         settingsView.alpha = 0.0
         settingsView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(settingsView)
 
-        settingsView.leadingAnchor.constraintEqualToAnchor(self.view.leadingAnchor).active = true
-        settingsView.trailingAnchor.constraintEqualToAnchor(self.view.trailingAnchor).active = true
-        settingsView.topAnchor.constraintEqualToAnchor(self.topLayoutGuide.bottomAnchor).active = true
-        settingsView.heightAnchor.constraintEqualToConstant(settings.preferredContentSize.height).active = true
+        NSLayoutConstraint.activate([
+            settingsView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            settingsView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            settingsView.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor),
+            settingsView.heightAnchor.constraint(equalToConstant: settings.preferredContentSize.height)
+        ])
 
-        settings.didMoveToParentViewController(self)
+        settings.didMove(toParent: self)
         settingsViewController = settings
     }
 
@@ -115,26 +117,26 @@ class MainViewController: UIViewController, MediaPickerDelegate {
         }
 
         let generalSettings = SettingsPageViewModel(name: "General", inspectors: [
-            BlurEffectStyleInspectorViewModel(name: "Blur", blurView: blurEffectView, vibrancyView: self.vibrancyEffectView, value: .Dark),
-            BarStyleInspectorViewModel.barStyleInspectorForNavigationBar(navigationBar, name: "Bar style")
-            ])
+            BlurEffectStyleInspectorViewModel(name: "Blur", blurView: blurEffectView, vibrancyView: self.vibrancyEffectView, value: .dark),
+            BarStyleInspectorViewModel.barStyleInspector(for: navigationBar, name: "Bar style")
+        ])
         let backgroundSettings = SettingsPageViewModel(name: "Background", inspectors: [
-            ColorInspectorViewModel.backgroundColorInspectorForView(contentView, name: "Color")
-            ])
+            ColorInspectorViewModel.backgroundColorInspector(for: contentView, name: "Color")
+        ])
         let underlaySettings = SettingsPageViewModel(name: "Underlay", inspectors: [
-            ColorInspectorViewModel.backgroundColorInspectorForView(blurEffectView, name: "Color")
-            ])
+            ColorInspectorViewModel.backgroundColorInspector(for: blurEffectView, name: "Color")
+        ])
         let overlaySettings = SettingsPageViewModel(name: "Overlay", inspectors: [
-            ColorInspectorViewModel.backgroundColorInspectorForView(blurEffectView.contentView, name: "Color")
-            ])
+            ColorInspectorViewModel.backgroundColorInspector(for: blurEffectView.contentView, name: "Color")
+        ])
         let normalTextSettings = SettingsPageViewModel(name: "Normal Text", inspectors: [
-            BooleanInspectorViewModel.visibilityInspectorForView(normalLabel, name: "Display"),
-            ColorInspectorViewModel.textColorInspectorForLabel(normalLabel, name: "Text Color")
-            ])
+            BooleanInspectorViewModel.visibilityInspector(for: normalLabel, name: "Display"),
+            ColorInspectorViewModel.textColorInspector(for: normalLabel, name: "Text Color")
+        ])
         let vibrantTextSettings = SettingsPageViewModel(name: "Vibrant Text", inspectors: [
-            BooleanInspectorViewModel.visibilityInspectorForView(vibrantLabel, name: "Display"),
-            ColorInspectorViewModel.tintColorInspectorForView(vibrantLabel, name: "Tint Color")
-            ])
+            BooleanInspectorViewModel.visibilityInspector(for: vibrantLabel, name: "Display"),
+            ColorInspectorViewModel.tintColorInspector(for: vibrantLabel, name: "Tint Color")
+        ])
 
         return SettingsViewModel(pages: [ generalSettings, backgroundSettings, underlaySettings, overlaySettings, normalTextSettings, vibrantTextSettings ])
     }
@@ -145,9 +147,9 @@ class MainViewController: UIViewController, MediaPickerDelegate {
         }
     }
 
-    private func setSettingsViewControllerDisplayed(displayed: Bool, animated: Bool) {
+    private func setSettingsViewControllerDisplayed(_ displayed: Bool, animated: Bool) {
         if animated {
-            UIView.animateWithDuration(0.3) {
+            UIView.animate(withDuration: 0.3) {
                 self.settingsViewControllerDisplayed = displayed
             }
         } else {
@@ -157,35 +159,35 @@ class MainViewController: UIViewController, MediaPickerDelegate {
 
     // MARK: - Panel dragging
 
-    private func blurredPanelHeightWithOffset(offset: CGFloat) -> CGFloat {
+    private func blurredPanelHeight(withOffset offset: CGFloat) -> CGFloat {
         return contentView.bounds.height * blurredPanelProportionalHeightConstraint.multiplier + offset
     }
 
     private var blurredPanelMinimumHeight = CGFloat(0)
     private var blurredPanelMinimumOffset: CGFloat {
-        return blurredPanelMinimumHeight - blurredPanelHeightWithOffset(0.0)
+        return blurredPanelMinimumHeight - blurredPanelHeight(withOffset: 0.0)
     }
 
     private var blurredPanelMaximumHeight: CGFloat {
         return contentView.bounds.height
     }
     private var blurredPanelMaximumOffset: CGFloat {
-        return blurredPanelMaximumHeight - blurredPanelHeightWithOffset(0.0)
+        return blurredPanelMaximumHeight - blurredPanelHeight(withOffset: 0.0)
     }
 
     private var blurredPanelDragInitialOffset: CGFloat?
 
-    @IBAction func adjustBottomPanel(sender: UIPanGestureRecognizer!) {
+    @IBAction func adjustBottomPanel(_ sender: UIPanGestureRecognizer!) {
         switch sender.state {
-        case .Began:
+        case .began:
             blurredPanelDragInitialOffset = blurredPanelProportionalHeightConstraint.constant
 
-        case .Changed:
+        case .changed:
             guard let initialOffset = blurredPanelDragInitialOffset else {
                 break
             }
 
-            let offset = initialOffset - sender.translationInView(contentView).y
+            let offset = initialOffset - sender.translation(in: contentView).y
             if offset < blurredPanelMinimumOffset {
                 blurredPanelProportionalHeightConstraint.constant = blurredPanelMinimumOffset
             } else if offset > blurredPanelMaximumOffset {
@@ -194,7 +196,7 @@ class MainViewController: UIViewController, MediaPickerDelegate {
                 blurredPanelProportionalHeightConstraint.constant = offset
             }
 
-        case .Ended:
+        case .ended:
             blurredPanelDragInitialOffset = nil
 
         default:
@@ -204,20 +206,20 @@ class MainViewController: UIViewController, MediaPickerDelegate {
 
     // MARK: - MediaPickerDelegate
 
-    func mediaPicker(mediaPicker: MediaPicker, didFinishWithResult result: MediaPicker.Result) {
+    func mediaPicker(_ mediaPicker: MediaPicker, didFinishWith result: MediaPicker.Result) {
         guard mediaPicker === self.mediaPicker else {
             return
         }
 
         switch result {
-        case .Photo(image: let image):
+        case .photo(image: let image):
             backgroundImageView.image = image
-            tutorialLabel.hidden = true
+            tutorialLabel.isHidden = true
 
-        case .ImportFailed:
+        case .importFailed:
             presentImportFailedAlert()
 
-        case .Cancelled:
+        case .cancelled:
             break
         }
 

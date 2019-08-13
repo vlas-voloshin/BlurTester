@@ -11,7 +11,7 @@ import MobileCoreServices
 
 class MediaPickerImportSource: NSObject, MediaPickerSource, UIDocumentMenuDelegate, UIDocumentPickerDelegate {
     
-    var delegate: MediaPickerSourceDelegate?
+    weak var delegate: MediaPickerSourceDelegate?
     var actionTitle: String {
         return NSLocalizedString("Import Photo", comment: "Media Picker option")
     }
@@ -27,47 +27,47 @@ class MediaPickerImportSource: NSObject, MediaPickerSource, UIDocumentMenuDelega
         return [ self.init() ]
     }
     
-    func presentInViewController(viewController: UIViewController) {
+    func present(in viewController: UIViewController) {
         presentingViewController = viewController
         
-        let documentMenu = UIDocumentMenuViewController(documentTypes: [ kUTTypeImage as String ], inMode: .Import)
+        let documentMenu = UIDocumentMenuViewController(documentTypes: [ kUTTypeImage as String ], in: .import)
         documentMenu.delegate = self
         
-        viewController.presentViewController(documentMenu, animated: true, completion: nil)
+        viewController.present(documentMenu, animated: true, completion: nil)
     }
     
     // MARK: UIDocumentMenuDelegate
     
-    func documentMenu(documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
+    func documentMenu(_ documentMenu: UIDocumentMenuViewController, didPickDocumentPicker documentPicker: UIDocumentPickerViewController) {
         documentPicker.delegate = self
         
         if let presentingViewController = self.presentingViewController {
-            presentingViewController.presentViewController(documentPicker, animated: true, completion: nil)
+            presentingViewController.present(documentPicker, animated: true, completion: nil)
         } else {
-            self.delegate?.mediaPickerSource(self, didFinishWithResult: .Cancelled, presentedNavigationController: nil)
+            self.delegate?.mediaPickerSource(self, didFinishWith: .cancelled, presented: nil)
         }
     }
     
-    func documentMenuWasCancelled(documentMenu: UIDocumentMenuViewController) {
-        self.delegate?.mediaPickerSource(self, didFinishWithResult: .Cancelled, presentedNavigationController: nil)
+    func documentMenuWasCancelled(_ documentMenu: UIDocumentMenuViewController) {
+        self.delegate?.mediaPickerSource(self, didFinishWith: .cancelled, presented: nil)
     }
     
     // MARK: UIDocumentPickerDelegate
     
-    func documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL url: NSURL) {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         let result: MediaPicker.Result
         // Load the imported image
-        if let imageData = NSData(contentsOfURL: url), image = UIImage(data: imageData) {
-            result = .Photo(image: image)
+        if let imageData = try? Data(contentsOf: url), let image = UIImage(data: imageData) {
+            result = .photo(image: image)
         } else {
-            result = .ImportFailed
+            result = .importFailed
         }
         
-        self.delegate?.mediaPickerSource(self, didFinishWithResult: result, presentedNavigationController: nil)
+        self.delegate?.mediaPickerSource(self, didFinishWith: result, presented: nil)
     }
     
-    func documentPickerWasCancelled(controller: UIDocumentPickerViewController) {
-        self.delegate?.mediaPickerSource(self, didFinishWithResult: .Cancelled, presentedNavigationController: nil)
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        self.delegate?.mediaPickerSource(self, didFinishWith: .cancelled, presented: nil)
     }
 
 }

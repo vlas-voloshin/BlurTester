@@ -28,7 +28,7 @@ class BooleanInspectorViewController: UIViewController, Inspector {
 
     var booleanViewModel: BooleanInspectorViewModel? {
         didSet {
-            if self.isViewLoaded() {
+            if self.isViewLoaded {
                 configureWithViewModel(booleanViewModel)
             }
         }
@@ -40,13 +40,13 @@ class BooleanInspectorViewController: UIViewController, Inspector {
         configureWithViewModel(booleanViewModel)
     }
 
-    private func configureWithViewModel(viewModel: BooleanInspectorViewModel?) {
+    private func configureWithViewModel(_ viewModel: BooleanInspectorViewModel?) {
         titleLabel.text = booleanViewModel?.name
-        valueSwitch.on = booleanViewModel?.value?.boolValue ?? false
+        valueSwitch.isOn = booleanViewModel?.value ?? false
     }
 
-    @IBAction func switchValueChanged(sender: UISwitch!) {
-        booleanViewModel?.value = sender.on
+    @IBAction func switchValueChanged(_ sender: UISwitch!) {
+        booleanViewModel?.value = sender.isOn
     }
 
 }

@@ -10,7 +10,7 @@ import UIKit
 
 protocol MediaPickerDelegate: class {
     
-    func mediaPicker(mediaPicker: MediaPicker, didFinishWithResult result: MediaPicker.Result)
+    func mediaPicker(_ mediaPicker: MediaPicker, didFinishWith result: MediaPicker.Result)
 
 }
 
@@ -19,68 +19,68 @@ class MediaPicker: MediaPickerSourceDelegate {
     /// Specifies the result of media picker
     enum Result {
         /// A photo has been picked. Associated value is the picked image.
-        case Photo(image: UIImage)
+        case photo(image: UIImage)
         /// Imported media could not be read.
-        case ImportFailed
+        case importFailed
         /// User cancelled picking the media.
-        case Cancelled
+        case cancelled
     }
     
-    var delegate: MediaPickerDelegate?
+    weak var delegate: MediaPickerDelegate?
     
     private weak var presentingViewController: UIViewController?
     private var presentedSource: MediaPickerSource?
     
-    func presentPickerFromViewController(viewController: UIViewController) {
+    func presentPicker(from viewController: UIViewController) {
         self.presentingViewController = viewController
         
         let sourceClasses = [ MediaPickerLocalSource.self, MediaPickerImportSource.self ] as [MediaPickerSource.Type]
         let sourceActions = sourceClasses
             .flatMap { $0.mediaPickerSources() }
             .map { source in
-                UIAlertAction(title: source.actionTitle, style: .Default) { _ in
+                UIAlertAction(title: source.actionTitle, style: .default) { _ in
                     self.presentSource(source)
                 }
         }
         
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .Cancel) { _ in
-            self.completeWithResult(.Cancelled)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in
+            self.complete(with: .cancelled)
         }
         
-        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         for action in sourceActions + [ cancelAction ] {
             actionSheet.addAction(action)
         }
         
-        viewController.presentViewController(actionSheet, animated: true, completion: nil)
+        viewController.present(actionSheet, animated: true, completion: nil)
     }
     
-    private func presentSource(source: MediaPickerSource) {
+    private func presentSource(_ source: MediaPickerSource) {
         guard let presentingViewController = self.presentingViewController else {
-            completeWithResult(.Cancelled)
+            complete(with: .cancelled)
             return
         }
         
         self.presentedSource = source
         
         source.delegate = self
-        source.presentInViewController(presentingViewController)
+        source.present(in: presentingViewController)
     }
     
-    private func completeWithResult(result: Result, afterDismissingViewController viewController: UIViewController? = nil) {
+    private func complete(with result: Result, afterDismissing viewController: UIViewController? = nil) {
         self.presentingViewController = nil
         
-        self.dynamicType.performAfterDismissingViewController(viewController) {
-            self.delegate?.mediaPicker(self, didFinishWithResult: result)
+        type(of: self).performAfterDismissing(viewController) {
+            self.delegate?.mediaPicker(self, didFinishWith: result)
         }
     }
     
     // MARK: Postprocessing
     
-    private static func performAfterDismissingViewController(viewController: UIViewController?, block: (Void) -> Void) {
-        if let viewController = viewController, presentingViewController = viewController.presentingViewController {
+    private static func performAfterDismissing(_ viewController: UIViewController?, block: @escaping () -> Void) {
+        if let viewController = viewController, let presentingViewController = viewController.presentingViewController {
             // Dismiss the provided view controller first
-            presentingViewController.dismissViewControllerAnimated(true) {
+            presentingViewController.dismiss(animated: true) {
                 block()
             }
         } else {
@@ -91,14 +91,14 @@ class MediaPicker: MediaPickerSourceDelegate {
     
     // MARK: MediaPickerSourceDelegate
     
-    func mediaPickerSource(source: MediaPickerSource, didFinishWithResult result: MediaPicker.Result, presentedNavigationController navigationController: UINavigationController?) {
+    func mediaPickerSource(_ source: MediaPickerSource, didFinishWith result: MediaPicker.Result, presented navigationController: UINavigationController?) {
         guard source === self.presentedSource else {
             return
         }
         
         self.presentedSource = nil
         
-        completeWithResult(result, afterDismissingViewController: navigationController)
+        complete(with: result, afterDismissing: navigationController)
     }
 
 }
@@ -116,15 +116,15 @@ protocol MediaPickerSource: class {
     static func mediaPickerSources() -> [MediaPickerSource]
     
     /// Presents UI of the picker source from the specified view controller.
-    func presentInViewController(viewController: UIViewController)
+    func present(in viewController: UIViewController)
     
 }
 
-protocol MediaPickerSourceDelegate: class {
+protocol MediaPickerSourceDelegate: AnyObject {
     
     /// Notifies the delegate that picker source has finished interacting with user.
     /// - parameter result: Result of the user interaction with the picker.
     /// - parameter navigationController: A navigation controller presented by the picker source, which delegate can either continue using to present additional UI or should dismiss. If `nil`, no such navigation controller is available.
-    func mediaPickerSource(source: MediaPickerSource, didFinishWithResult result: MediaPicker.Result, presentedNavigationController navigationController: UINavigationController?)
+    func mediaPickerSource(_ source: MediaPickerSource, didFinishWith result: MediaPicker.Result, presented navigationController: UINavigationController?)
     
 }

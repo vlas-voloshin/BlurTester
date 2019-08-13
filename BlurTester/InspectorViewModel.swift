@@ -17,7 +17,7 @@ protocol InspectorViewModel: class {
 
 protocol InspectorViewModelWithValue: InspectorViewModel {
 
-    typealias ValueType
+    associatedtype ValueType
 
     var value: ValueType? { get set }
     
@@ -25,23 +25,23 @@ protocol InspectorViewModelWithValue: InspectorViewModel {
 
 protocol KeyedInspectorViewModel: InspectorViewModelWithValue {
 
-    weak var inspectedObject: AnyObject? { get }
+    var inspectedObject: NSObject? { get }
     var inspectedKey: String { get }
 
-    func transformKeyedValue(value: AnyObject?) -> ValueType?
-    func transformToKeyedValue(value: ValueType?) -> AnyObject?
+    func transformKeyedValue(_ value: Any?) -> ValueType?
+    func transformToKeyedValue(_ value: ValueType?) -> Any?
 
 }
 
 extension KeyedInspectorViewModel {
 
     var value: ValueType? {
-        get { return transformKeyedValue(inspectedObject?.valueForKey(inspectedKey)) }
+        get { return transformKeyedValue(inspectedObject?.value(forKey: inspectedKey)) }
         set { inspectedObject?.setValue(transformToKeyedValue(newValue), forKey: inspectedKey) }
     }
 
-    func transformKeyedValue(value: AnyObject?) -> ValueType? { return value as? ValueType }
-    func transformToKeyedValue(value: ValueType?) -> AnyObject? { return value as? AnyObject }
+    func transformKeyedValue(_ value: Any?) -> ValueType? { return value as? ValueType }
+    func transformToKeyedValue(_ value: ValueType?) -> Any? { return value }
 
 }
 
@@ -49,8 +49,8 @@ extension KeyedInspectorViewModel where ValueType: RawRepresentable, ValueType.R
 
     var value: ValueType? {
         get {
-            let number = inspectedObject?.valueForKey(inspectedKey) as? NSNumber
-            return number.flatMap { ValueType(rawValue: $0.integerValue) }
+            let number = inspectedObject?.value(forKey: inspectedKey) as? Int
+            return number.flatMap { ValueType(rawValue: $0) }
         }
         set { inspectedObject?.setValue(newValue?.rawValue, forKey: inspectedKey) }
     }
@@ -64,9 +64,7 @@ protocol SelectableInspectorViewModel: InspectorViewModel {
     
 }
 
-protocol SelectableInspectorViewModelWithValue: InspectorViewModelWithValue {
-
-    typealias ValueType: Hashable
+protocol SelectableInspectorViewModelWithValue: InspectorViewModelWithValue where ValueType: Hashable {
 
     var values: [ValueType] { get }
     var titlesMapping: [ValueType : String] { get }
@@ -77,7 +75,7 @@ extension SelectableInspectorViewModelWithValue where Self: SelectableInspectorV
 
     var selectedOptionIndex: Int? {
         get {
-            return value.flatMap { values.indexOf($0) }
+            return value.flatMap { values.firstIndex(of: $0) }
         }
         set {
             value = newValue.flatMap { values[$0] }

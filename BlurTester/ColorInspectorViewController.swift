@@ -29,7 +29,7 @@ class ColorInspectorViewController: UIViewController, Inspector, ColorInspectorC
 
     private var colorViewModel: ColorInspectorViewModel? {
         didSet {
-            if self.isViewLoaded() {
+            if self.isViewLoaded {
                 configureWithViewModel(colorViewModel)
             }
         }
@@ -41,10 +41,10 @@ class ColorInspectorViewController: UIViewController, Inspector, ColorInspectorC
         configureWithViewModel(colorViewModel)
     }
 
-    private func configureWithViewModel(viewModel: ColorInspectorViewModel?) {
+    private func configureWithViewModel(_ viewModel: ColorInspectorViewModel?) {
         titleLabel.text = colorViewModel?.name
         hexColorLabel.text = colorViewModel?.value?.vv_hexStringValueRGBA()
-        currentRepresentationType = .RGB
+        currentRepresentationType = .rgb
     }
 
     // MARK: - Component views
@@ -52,8 +52,8 @@ class ColorInspectorViewController: UIViewController, Inspector, ColorInspectorC
     private var currentRepresentationType: ColorRepresentationType? {
         didSet {
             if let representation = currentRepresentation {
-                let componentViews = representation.dynamicType.componentTitles.map { title -> ColorInspectorComponentView in
-                    guard let view = self.dynamicType.componentViewNib.instantiateWithOwner(nil, options: nil).first as? ColorInspectorComponentView else {
+                let componentViews = type(of: representation).componentTitles.map { title -> ColorInspectorComponentView in
+                    guard let view = type(of: self).componentViewNib.instantiate(withOwner: nil, options: nil).first as? ColorInspectorComponentView else {
                         preconditionFailure("Invalid color component view instantiated.")
                     }
 
@@ -63,7 +63,7 @@ class ColorInspectorViewController: UIViewController, Inspector, ColorInspectorC
                     return view
                 }
 
-                for (index, view) in componentViews.enumerate() {
+                for (index, view) in componentViews.enumerated() {
                     view.slider.value = Float(representation.components[index])
                 }
 
@@ -83,27 +83,27 @@ class ColorInspectorViewController: UIViewController, Inspector, ColorInspectorC
         }
         didSet {
             for view in componentViews {
-                view.backgroundColor = UIColor.clearColor()
+                view.backgroundColor = UIColor.clear
                 view.translatesAutoresizingMaskIntoConstraints = false
                 componentSlidersStackView.addArrangedSubview(view)
 
-                view.heightAnchor.constraintEqualToConstant(self.dynamicType.componentViewHeight).active = true
+                view.heightAnchor.constraint(equalToConstant: type(of: self).componentViewHeight).isActive = true
             }
         }
     }
 
-    @IBAction func showGrayscaleComponents(sender: AnyObject?) {
-        currentRepresentationType = .Grayscale
+    @IBAction func showGrayscaleComponents(_ sender: Any?) {
+        currentRepresentationType = .grayscale
     }
 
-    @IBAction func showRGBComponents(sender: AnyObject?) {
-        currentRepresentationType = .RGB
+    @IBAction func showRGBComponents(_ sender: Any?) {
+        currentRepresentationType = .rgb
     }
 
     private var currentRepresentation: ColorRepresentation? {
         get {
             if let color = colorViewModel?.value {
-                return currentRepresentationType?.representationWithColor(color)
+                return currentRepresentationType?.representation(with: color)
             } else {
                 return nil
             }
@@ -116,8 +116,8 @@ class ColorInspectorViewController: UIViewController, Inspector, ColorInspectorC
 
     // MARK: - ColorInspectorComponentViewDelegate
 
-    func colorInspectorComponentView(componentView: ColorInspectorComponentView, didChangeValue value: Float) {
-        if let index = componentViews.indexOf(componentView) {
+    func colorInspectorComponentView(_ componentView: ColorInspectorComponentView, didChangeValue value: Float) {
+        if let index = componentViews.firstIndex(of: componentView) {
             currentRepresentation?.components[index] = CGFloat(value)
         }
     }

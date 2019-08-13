@@ -25,7 +25,7 @@ struct GrayscaleColorRepresentation: ColorRepresentation {
             if components.count == 2 {
                 return UIColor(white: components[0], alpha: components[1])
             } else {
-                return UIColor.blackColor()
+                return .black
             }
         }
         set {
@@ -53,7 +53,7 @@ struct RGBColorRepresentation: ColorRepresentation {
             if components.count == 4 {
                 return UIColor(red: components[0], green: components[1], blue: components[2], alpha: components[3])
             } else {
-                return UIColor.blackColor()
+                return .black
             }
         }
         set {
@@ -77,15 +77,15 @@ struct RGBColorRepresentation: ColorRepresentation {
 }
 
 enum ColorRepresentationType {
-    case Grayscale
-    case RGB
+    case grayscale
+    case rgb
 
-    func representationWithColor(color: UIColor) -> ColorRepresentation {
+    func representation(with color: UIColor) -> ColorRepresentation {
         switch self {
-        case .Grayscale:
+        case .grayscale:
             return GrayscaleColorRepresentation(color: color)
 
-        case .RGB:
+        case .rgb:
             return RGBColorRepresentation(color: color)
         }
     }

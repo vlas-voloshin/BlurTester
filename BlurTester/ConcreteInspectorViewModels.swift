@@ -13,26 +13,26 @@ class ColorInspectorViewModel: KeyedInspectorViewModel {
     typealias ValueType = UIColor
 
     let name: String
-    weak var inspectedObject: AnyObject?
+    weak var inspectedObject: NSObject?
     let inspectedKey: String
 
     let inspectorViewControllerIdentifier = "ColorInspector"
 
-    required init(name: String, inspectedObject: AnyObject, inspectedKey: String) {
+    required init(name: String, inspectedObject: NSObject, inspectedKey: String) {
         self.name = name
         self.inspectedObject = inspectedObject
         self.inspectedKey = inspectedKey
     }
 
-    static func backgroundColorInspectorForView(view: UIView, name: String) -> ColorInspectorViewModel {
+    static func backgroundColorInspector(for view: UIView, name: String) -> ColorInspectorViewModel {
         return self.init(name: name, inspectedObject: view, inspectedKey: "backgroundColor")
     }
 
-    static func tintColorInspectorForView(view: UIView, name: String) -> ColorInspectorViewModel {
+    static func tintColorInspector(for view: UIView, name: String) -> ColorInspectorViewModel {
         return self.init(name: name, inspectedObject: view, inspectedKey: "tintColor")
     }
 
-    static func textColorInspectorForLabel(label: UILabel, name: String) -> ColorInspectorViewModel {
+    static func textColorInspector(for label: UILabel, name: String) -> ColorInspectorViewModel {
         return self.init(name: name, inspectedObject: label, inspectedKey: "textColor")
     }
 
@@ -40,39 +40,39 @@ class ColorInspectorViewModel: KeyedInspectorViewModel {
 
 class BooleanInspectorViewModel: KeyedInspectorViewModel {
 
-    typealias ValueType = NSNumber
+    typealias ValueType = Bool
 
     let name: String
-    weak var inspectedObject: AnyObject?
+    weak var inspectedObject: NSObject?
     let inspectedKey: String
     let invert: Bool
 
     let inspectorViewControllerIdentifier = "BooleanInspector"
 
-    func transformKeyedValue(value: AnyObject?) -> ValueType? {
+    func transformKeyedValue(_ value: Any?) -> ValueType? {
         if invert {
-            return !((value as? ValueType)?.boolValue ?? false)
+            return !(value as? Bool ?? false)
         } else {
             return value as? ValueType
         }
     }
 
-    func transformToKeyedValue(value: ValueType?) -> AnyObject? {
+    func transformToKeyedValue(_ value: ValueType?) -> Any? {
         if invert {
-            return !(value?.boolValue ?? false)
+            return !(value ?? false)
         } else {
             return value
         }
     }
 
-    required init(name: String, inspectedObject: AnyObject, inspectedKey: String, invert: Bool = false) {
+    required init(name: String, inspectedObject: NSObject, inspectedKey: String, invert: Bool = false) {
         self.name = name
         self.inspectedObject = inspectedObject
         self.inspectedKey = inspectedKey
         self.invert = invert
     }
 
-    static func visibilityInspectorForView(view: UIView, name: String) -> BooleanInspectorViewModel {
+    static func visibilityInspector(for view: UIView, name: String) -> BooleanInspectorViewModel {
         return self.init(name: name, inspectedObject: view, inspectedKey: "hidden", invert: true)
     }
     
@@ -83,20 +83,20 @@ class BarStyleInspectorViewModel: KeyedInspectorViewModel, SelectableInspectorVi
     typealias ValueType = UIBarStyle
 
     let name: String
-    weak var inspectedObject: AnyObject?
+    weak var inspectedObject: NSObject?
     let inspectedKey: String
 
     let inspectorViewControllerIdentifier = "SelectionInspector"
-    let values: [ValueType] = [ .Default, .Black ]
-    let titlesMapping: [ValueType : String] = [ .Default : "Default", .Black : "Black" ]
+    let values: [ValueType] = [ .default, .black ]
+    let titlesMapping: [ValueType : String] = [ .default : "Default", .black : "Black" ]
 
-    required init(name: String, inspectedObject: AnyObject, inspectedKey: String) {
+    required init(name: String, inspectedObject: NSObject, inspectedKey: String) {
         self.name = name
         self.inspectedObject = inspectedObject
         self.inspectedKey = inspectedKey
     }
 
-    static func barStyleInspectorForNavigationBar(navigationBar: UINavigationBar, name: String) -> BarStyleInspectorViewModel {
+    static func barStyleInspector(for navigationBar: UINavigationBar, name: String) -> BarStyleInspectorViewModel {
         return self.init(name: name, inspectedObject: navigationBar, inspectedKey: "barStyle")
     }
 
@@ -104,7 +104,7 @@ class BarStyleInspectorViewModel: KeyedInspectorViewModel, SelectableInspectorVi
 
 class BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, SelectableInspectorViewModelWithValue {
 
-    typealias ValueType = UIBlurEffectStyle
+    typealias ValueType = UIBlurEffect.Style
 
     let name: String
     weak var blurView: UIVisualEffectView?
@@ -112,7 +112,7 @@ class BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, Selectabl
     var value: ValueType? {
         didSet {
             let blurEffect = value.flatMap { UIBlurEffect(style: $0) }
-            let vibrancyEffect = blurEffect.flatMap { UIVibrancyEffect(forBlurEffect: $0) }
+            let vibrancyEffect = blurEffect.flatMap { UIVibrancyEffect(blurEffect: $0) }
 
             blurView?.effect = blurEffect
             vibrancyView?.effect = vibrancyEffect
@@ -120,8 +120,8 @@ class BlurEffectStyleInspectorViewModel: SelectableInspectorViewModel, Selectabl
     }
 
     let inspectorViewControllerIdentifier = "SelectionInspector"
-    let values: [ValueType] = [ .Dark, .Light, .ExtraLight ]
-    let titlesMapping: [ValueType : String] = [ .Dark : "Dark", .Light : "Light", .ExtraLight : "Extra Light" ]
+    let values: [ValueType] = [ .dark, .light, .extraLight ]
+    let titlesMapping: [ValueType : String] = [ .dark : "Dark", .light : "Light", .extraLight : "Extra Light" ]
 
     required init(name: String, blurView: UIVisualEffectView?, vibrancyView: UIVisualEffectView?, value: ValueType?) {
         self.name = name
